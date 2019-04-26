@@ -1,0 +1,28 @@
+----------------------------------------------------------------------------------------------
+			Marvellous Duplicate File Scanner 
+----------------------------------------------------------------------------------------------
+
+Description:
+
+	This is a automation script which scans for the duplicate file in a particular directory.
+	Imediate after scanning is completed the duplicate files are deleted.
+	A log file is created for each scan which contains the list of the files deleted.
+	The scan for the duplicate file scheduled for a particular time interval.
+	And every day at 12:05 AM the email is send to the intended user which has
+	a log file attached which contains the list of files deleted.
+
+Usage:
+	duplicatefileremoval.py C:\dir 50 "abc@gmail.com"
+	
+	- duplicatefileremoval.py := Name of python automation script
+
+	- C:\dir := Absolute path of directory which may contains duplicate files
+	
+	- 50 := Time interval of script in minutes
+	
+	- abc@gmail.com := Mail ID of the receiver	
+		
+		
+	
+	
+	
