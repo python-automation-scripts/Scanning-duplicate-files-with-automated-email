@@ -38,14 +38,16 @@ def CreateOutput(DirName,LogDir = "Log"):
 	fd.write(data);
 	fd.close();
 
-	return FileName;
-
 
 def CreateMail(To,FileName,ScanTime,FileScanCnt,FileDeletedCnt):
 	username = "harshalghule20@gmail.com";
-	password = "**********************";
+	password = "harshal104242";
 	to = To;
 	
+	name = To[0:To.rfind('@')];
+	name = ''.join(i for i in name if not i.isdigit())
+
+
 	subject  = """
 	Marvellous Duplicate File Log Generated at : %s
 	""" %(time.ctime());
@@ -63,7 +65,7 @@ def CreateMail(To,FileName,ScanTime,FileScanCnt,FileDeletedCnt):
 
 	Thanks & Regards,
 	Harshal Narayan Ghule
-	""" %(To[0:To.rfind('@')],ScanTime,FileScanCnt,FileDeletedCnt);
+	""" %(name,ScanTime,FileScanCnt,FileDeletedCnt);
 
 	if EmailModule.is_connected():
 		EmailModule.sendmail(username,password,To,FileName,subject,body);
@@ -92,7 +94,7 @@ def main():
 		ScanTime = time.ctime();
 		
 		schedule.every(Time_Interval).minutes.do(lambda : CreateOutput(DirName));
-		schedule.every().day.at("00:05").do( lambda : CreateMail(To_Email,OutputFile,ScanTime,FileScanCount,FileDeleteCount));
+		schedule.every().day.at("13:53").do( lambda : CreateMail(To_Email,OutputFile,ScanTime,FileScanCount,FileDeleteCount));
 		
 		while True:
 			schedule.run_pending();
