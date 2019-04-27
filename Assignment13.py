@@ -1,15 +1,17 @@
 import os;
 import time;
 import schedule;
-import datetime;
 from sys import *;
 import EmailModule;
+from datetime import datetime;
 import ChecksumFunctionalityModule as module;
 
 FileScanCount = 0;
 FileDeleteCount = 0;
 OutputFile = "";
- 
+ScanTime = "";
+LogTime = "";
+
 def CreateOutput(DirName,LogDir = "Log"):
 	
 	LogDir = os.path.join(DirName,LogDir);
@@ -17,29 +19,35 @@ def CreateOutput(DirName,LogDir = "Log"):
 	if(not os.path.exists(LogDir)):
 		os.mkdir(LogDir);
 	
-	seperator = "-" * 160;
-	FileName =  os.path.join(LogDir,str("Marvellous %s.log"%(time.ctime())).replace(':','_').replace(' ','_') );
-	
+	global FileScanCount,FileDeleteCount,OutputFile,ScanTime,LogTime
+	ScanTime = (datetime.now()).strftime("%I:%M:%S %p");
+
 	List,FileScanCnt,FileDeletedCnt =  module.DeleteDuplicateFiles(DirName);
 
-	global FileScanCount,FileDeleteCount,OutputFile
 	FileScanCount = FileScanCnt;
-	FileDeleteCount = FileDeletedCnt;
+	FileDeleteCount = FileDeletedCnt;	
+
+	LogTime = time.ctime();
+	FileName =  os.path.join(LogDir,"Marvellous %s.log"%(LogTime).replace(' ','_').replace(':','_') );
+
+	seperator = "-" * 160;	
 	OutputFile = FileName;
 
 	data = "";
 	for element in List:
 		data += str(element) + "\n";
 
+	
+
 	fd = open(FileName,"x");
 	fd.write(seperator + "\n");
-	fd.write("Marvellous Duplicate Deleted Files Logger : "+time.ctime() + "\n");
+	fd.write("Marvellous Duplicate Deleted Files Logger : "+ LogTime + "\n");
 	fd.write(seperator + "\n\n");
 	fd.write(data);
 	fd.close();
+	
 
-
-def CreateMail(To,FileName,ScanTime,FileScanCnt,FileDeletedCnt):
+def CreateMail(To,FileName,ScanTime,LogTime,FileScanCnt,FileDeletedCnt):
 	username = "harshalghule20@gmail.com";
 	password = "harshal104242";
 	to = To;
@@ -50,7 +58,7 @@ def CreateMail(To,FileName,ScanTime,FileScanCnt,FileDeletedCnt):
 
 	subject  = """
 	Marvellous Duplicate File Log Generated at : %s
-	""" %(time.ctime());
+	""" %(LogTime);
 
 	body =  """
 	Hello %s 
@@ -91,10 +99,9 @@ def main():
 		DirName = argv[1];
 		Time_Interval = int(argv[2]);
 		To_Email = argv[3];
-		ScanTime = time.ctime();
 		
 		schedule.every(Time_Interval).minutes.do(lambda : CreateOutput(DirName));
-		schedule.every().day.at("13:53").do( lambda : CreateMail(To_Email,OutputFile,ScanTime,FileScanCount,FileDeleteCount));
+		schedule.every().day.at("15:45").do( lambda : CreateMail(To_Email,OutputFile,ScanTime,LogTime,FileScanCount,FileDeleteCount));
 		
 		while True:
 			schedule.run_pending();
