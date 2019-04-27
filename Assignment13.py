@@ -49,7 +49,7 @@ def CreateOutput(DirName,LogDir = "Log"):
 
 def CreateMail(To,FileName,ScanTime,LogTime,FileScanCnt,FileDeletedCnt):
 	username = "harshalghule20@gmail.com";
-	password = "harshal104242";
+	password = "****************";
 	to = To;
 	
 	name = To[0:To.rfind('@')];
